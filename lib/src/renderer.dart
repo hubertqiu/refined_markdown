@@ -106,18 +106,23 @@ class NormalList extends Renderer {
 
     // 2. 将"     - "的缩进加倍
     int spaceCnt = symbolEnd - symbolStart - 2;
-    String spacing = " " * spaceCnt * 2;
 
     // 3. 替换符号"-"
     String symbol = "";
-    if (spaceCnt == 0)
+    int indent = 0;
+    if (spaceCnt == 0) {
       symbol = "●";
-    else if (spaceCnt <= 2)
+      indent = 0;
+    } else if (spaceCnt <= 2) {
       symbol = "○";
-    else if (spaceCnt <= 4)
+      indent = 2;
+    } else if (spaceCnt <= 4) {
       symbol = "■";
-    else
+      indent = 4;
+    } else {
       symbol = "□";
+      indent = 6;
+    }
 
     return TextSpan(
       children: [
@@ -133,17 +138,21 @@ class NormalList extends Renderer {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Padding(padding: EdgeInsets.only(left: spaceCnt * css.fontSize)),
+                  Padding(padding: EdgeInsets.only(left: indent * css.fontSize)),
                   Container(
-                    width: css.fontSize * 1.5,
-                    height: css.fontSize * 1.5,
-                    child: Center(
-                      child: Text(
-                        symbol,
-                        style: CSS(
-                          fontSize: css.fontSize / 2,
-                          fontColor: css.fontColor,
-                        ).castStyle(),
+                    padding: EdgeInsets.only(top: css.fontSize * (css.lineHeightScale - 1) / 2),
+                    child: SizedBox(
+                      width: css.fontSize,
+                      height: css.fontSize * css.lineHeightScale,
+                      child: Center(
+                        child: Text(
+                          symbol,
+                          style: CSS(
+                            fontSize: css.fontSize / 2,
+                            lineHeightScale: 1,
+                            fontColor: css.fontColor,
+                          ).castStyle(),
+                        ),
                       ),
                     ),
                   ),

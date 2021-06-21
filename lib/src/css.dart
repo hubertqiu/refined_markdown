@@ -21,6 +21,7 @@ class CSS {
     this.underline,
   }) {
     fontSize ??= 11;
+    lineHeightScale ??= 1;
     isItalic ??= false;
     isBold ??= false;
     fontColor ??= Colors.black87;

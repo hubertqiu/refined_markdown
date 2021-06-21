@@ -49,6 +49,7 @@ class _MarkdownPageState extends State<MarkdownPage> {
   Widget build(BuildContext context) {
     CSS baseCSS = CSS();
     baseCSS.fontSize = 13;
+    baseCSS.lineHeightScale = 1.5;
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
