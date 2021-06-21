@@ -96,14 +96,14 @@ taml, code block, code segmentation, task list, normal list, sequence list, titl
 
 ### RefinedMarkdown
 
-| param | type   | explanation                                                                                                                                                                                                                                                             | is required |
+| param | type   | explanation                                                                                                                                                                                                                                                             | is @required |
 | ----- | ------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------- |
 | text  | String | The **raw** text of a markdown string, please notice that.                                                                                                                                                                                                              | yes         |
 | css   | CSS    | The cascading style sheet (in concept) that helps you **build the basic style** of your markdown texts to be rendered. In detail, The rendered text style like the style of “## header2” will be rendered on the basis of the basic style (baseCSS in code demo above). | yes         |
 
 ### CSS
 
-| param           | type  | default value      | explanation                                   | is required |
+| param           | type  | default value      | explanation                                   | is @required |
 | --------------- | ----- | ------------------ | --------------------------------------------- | ----------- |
 | fontSize        | int   | 11                 | The size of the text                          | no          |
 | fontColor       | Color | Colors.black87     | The color of the text                         | no          |

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 class CSS {
   double fontSize;
+  double lineHeightScale;
   bool isItalic;
   bool isBold;
   bool deleted;
@@ -11,6 +12,7 @@ class CSS {
 
   CSS({
     this.fontSize,
+    this.lineHeightScale,
     this.isItalic,
     this.isBold,
     this.fontColor,
@@ -42,6 +44,7 @@ class CSS {
   TextStyle castStyle() {
     return TextStyle(
       fontSize: fontSize,
+      height: lineHeightScale,
       color: fontColor,
       fontStyle: (isItalic) ? FontStyle.italic : FontStyle.normal,
       fontWeight: (isBold) ? FontWeight.bold : FontWeight.normal,

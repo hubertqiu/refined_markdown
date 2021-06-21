@@ -21,8 +21,7 @@ class Analyser {
       RegExp regExp = RegExp(pattern);
       var firstMatch = regExp.firstMatch(text);
       if (firstMatch == null) continue;
-      if (firstMatch.start < start ||
-          (firstMatch.start == start && firstMatch.end > end)) {
+      if (firstMatch.start < start || (firstMatch.start == start && firstMatch.end > end)) {
         start = firstMatch.start;
         end = firstMatch.end;
         finPtrn = pattern;

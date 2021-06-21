@@ -110,13 +110,13 @@ class NormalList extends Renderer {
     // 3. 替换符号"-"
     String symbol = "";
     if (spaceCnt == 0)
-      symbol = "● ";
+      symbol = "●";
     else if (spaceCnt <= 2)
-      symbol = "○ ";
+      symbol = "○";
     else if (spaceCnt <= 4)
-      symbol = "■ ";
+      symbol = "■";
     else
-      symbol = "□ ";
+      symbol = "□";
 
     return TextSpan(
       children: [
@@ -128,10 +128,27 @@ class NormalList extends Renderer {
           text: "\n" + spacing,
           style: css.castStyle(),
           children: [
-            TextSpan(
-              text: symbol,
-              style: CSS(fontSize: 5).castStyle(),
-            ),
+            WidgetSpan(
+                child: SizedBox(
+              width: css.fontSize,
+              height: css.fontSize,
+              child: Center(
+                child: Text(
+                  symbol,
+                  style: CSS(
+                    fontSize: css.fontSize / 2,
+                    fontColor: css.fontColor,
+                  ).castStyle(),
+                ),
+              ),
+            )),
+            // TextSpan(
+            //   text: symbol,
+            //   style: CSS(
+            //     fontSize: css.fontSize,
+            //     fontColor: css.fontColor,
+            //   ).castStyle(),
+            // ),
           ],
         ),
         Analyser(
@@ -749,8 +766,7 @@ class MDImage extends Renderer {
                 child: CachedNetworkImage(
                   imageUrl: addr,
                   placeholder: (context, url) => Icon(Icons.arrow_downward),
-                  errorWidget: (context, url, error) =>
-                      Text("Error: $error\nCannot fetch resource from $url\n"),
+                  errorWidget: (context, url, error) => Text("Error: $error\nCannot fetch resource from $url\n"),
                 ),
                 onTap: () async {
                   await Launch.getInstance().url(addr);
@@ -923,16 +939,14 @@ class StyledText extends Renderer {
     // 2. 获取"红色文字, 大小12, 字体常规"
     RegExp keyReg = RegExp(r">.+<");
     var keyMatch = keyReg.firstMatch(src.substring(start, realEnd));
-    String keyStr =
-        src.substring(start + keyMatch.start + 1, start + keyMatch.end - 1);
+    String keyStr = src.substring(start + keyMatch.start + 1, start + keyMatch.end - 1);
 
     // 3. 获取关键字"color"的内容
     RegExp colorReg = RegExp(r"color=[^ \n>]+ *");
     var colorMatch = colorReg.firstMatch(src.substring(start, realEnd));
     String colorStr;
     if (colorMatch != null) {
-      colorStr =
-          src.substring(start + colorMatch.start + 6, start + colorMatch.end);
+      colorStr = src.substring(start + colorMatch.start + 6, start + colorMatch.end);
       colorStr = colorStr.replaceAll("\"", "").trim();
     }
 
@@ -941,16 +955,14 @@ class StyledText extends Renderer {
     var sizeMatch = sizeReg.firstMatch(src.substring(start, realEnd));
     String sizeStr;
     if (sizeMatch != null) {
-      sizeStr =
-          src.substring(start + sizeMatch.start + 5, start + sizeMatch.end);
+      sizeStr = src.substring(start + sizeMatch.start + 5, start + sizeMatch.end);
     }
 
     // 5. 设置关键字的叠加样式
     CSS styledCSS = CSS.copyFrom(css);
     if (colorStr != null) {
       styledCSS.fontColor = SmartColor.getInstance().fromString(colorStr);
-      if (colorStr != "transparent" &&
-          styledCSS.fontColor == Colors.transparent) {
+      if (colorStr != "transparent" && styledCSS.fontColor == Colors.transparent) {
         try {
           styledCSS.fontColor = Color(int.parse(colorStr));
         } catch (e) {
