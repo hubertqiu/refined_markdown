@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_highlight/themes/github.dart';
@@ -125,23 +126,39 @@ class NormalList extends Renderer {
           css: css,
         ).parseTextSpan(context),
         TextSpan(
-          text: "\n" + spacing,
+          text: "\n",
           style: css.castStyle(),
           children: [
             WidgetSpan(
-                child: SizedBox(
-              width: css.fontSize,
-              height: css.fontSize,
-              child: Center(
-                child: Text(
-                  symbol,
-                  style: CSS(
-                    fontSize: css.fontSize / 2,
-                    fontColor: css.fontColor,
-                  ).castStyle(),
-                ),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(padding: EdgeInsets.only(left: spaceCnt * css.fontSize)),
+                  Container(
+                    width: css.fontSize * 1.5,
+                    height: css.fontSize * 1.5,
+                    child: Center(
+                      child: Text(
+                        symbol,
+                        style: CSS(
+                          fontSize: css.fontSize / 2,
+                          fontColor: css.fontColor,
+                        ).castStyle(),
+                      ),
+                    ),
+                  ),
+                  Flexible(
+                    child: Text.rich(
+                      Analyser(
+                        text: src.substring(symbolEnd, end),
+                        css: css,
+                      ).parseTextSpan(context),
+                      softWrap: true,
+                    ),
+                  ),
+                ],
               ),
-            )),
+            ),
             // TextSpan(
             //   text: symbol,
             //   style: CSS(
@@ -151,10 +168,6 @@ class NormalList extends Renderer {
             // ),
           ],
         ),
-        Analyser(
-          text: src.substring(symbolEnd, end),
-          css: css,
-        ).parseTextSpan(context),
         Analyser(
           text: src.substring(end, src.length),
           css: css,
