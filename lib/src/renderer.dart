@@ -115,13 +115,12 @@ class NormalList extends Renderer {
       indent = 0;
     } else if (spaceCnt <= 2) {
       symbol = "○";
-      indent = 2;
+      indent = 1;
     } else if (spaceCnt <= 4) {
-      symbol = "■";
-      indent = 4;
+      indent = 2;
     } else {
       symbol = "□";
-      indent = 6;
+      indent = 3;
     }
 
     return TextSpan(
