@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
@@ -99,7 +101,7 @@ class NormalList extends Renderer {
     // 假设提取的字符串是: "\n     - 常规列表\n"
 
     // 1. 定位符号"     - "
-    RegExp symbolReg = RegExp(r" *- ");
+    RegExp symbolReg = RegExp(r" *[-|\*|\+] ");
     var match = symbolReg.firstMatch(src.substring(start, end));
     int symbolEnd = start + match.end; // "- "的后一位
     int symbolStart = start + match.start;
@@ -112,15 +114,16 @@ class NormalList extends Renderer {
     int indent = 0;
     if (spaceCnt == 0) {
       symbol = "●";
-      indent = 0;
+      indent = 1;
     } else if (spaceCnt <= 2) {
       symbol = "○";
-      indent = 1;
-    } else if (spaceCnt <= 4) {
       indent = 2;
+    } else if (spaceCnt <= 4) {
+      symbol = "■";
+      indent = 3;
     } else {
       symbol = "□";
-      indent = 3;
+      indent = 4;
     }
 
     return TextSpan(
@@ -137,7 +140,7 @@ class NormalList extends Renderer {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Padding(padding: EdgeInsets.only(left: indent * css.fontSize)),
+                  Padding(padding: EdgeInsets.only(left: indent * 8.0)),
                   Container(
                     padding: EdgeInsets.only(top: css.fontSize * (css.lineHeightScale - 1) / 2),
                     child: SizedBox(
@@ -155,6 +158,7 @@ class NormalList extends Renderer {
                       ),
                     ),
                   ),
+                  Padding(padding: EdgeInsets.only(left: 2)),
                   Flexible(
                     child: Text.rich(
                       Analyser(
@@ -772,7 +776,7 @@ class MDImage extends Renderer {
     int addrStart = start + addrMatch.start + 1;
     int addrEnd = start + addrMatch.end - 1;
     String addr = src.substring(addrStart, addrEnd).trim();
-
+    bool isNetworkImage = addr.startsWith("http://") || addr.startsWith("https://");
     return TextSpan(
       children: [
         Analyser(
@@ -784,13 +788,17 @@ class MDImage extends Renderer {
             children: [
               Text("", style: css.castStyle()),
               GestureDetector(
-                child: CachedNetworkImage(
-                  imageUrl: addr,
-                  placeholder: (context, url) => Icon(Icons.arrow_downward),
-                  errorWidget: (context, url, error) => Text("Error: $error\nCannot fetch resource from $url\n"),
-                ),
+                child: isNetworkImage
+                    ? CachedNetworkImage(
+                        imageUrl: addr,
+                        placeholder: (context, url) => Icon(Icons.arrow_downward),
+                        errorWidget: (context, url, error) => Text("Error: $error\nCannot fetch resource from $url\n"),
+                      )
+                    : Image.file(File(addr)),
                 onTap: () async {
-                  await Launch.getInstance().url(addr);
+                  if (isNetworkImage) {
+                    await Launch.getInstance().url(addr);
+                  }
                 },
               ),
             ],
